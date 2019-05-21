@@ -206,7 +206,7 @@ if __name__ == '__main__':
                 </p>
 
                 <p>
-                    We are pleased to inform you that your proposal <strong>%s</strong> has been <strong>Accepted</strong> by the Programme Committee of the PyCon Taiwan 2017.
+                    We are pleased to inform you that your proposal <strong>%s</strong> has been <strong>Accepted</strong> by the Programme Committee of the PyCon Taiwan 2019.
                 </p>
                 <p>
                     The program team is going to plan the full program schedule for PyCon Taiwan 2019, 
