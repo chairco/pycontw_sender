@@ -58,11 +58,11 @@ class SMTP(object):
             smt.login(self.username, self.password)
             self.smt = smt
         except smtplib.SMTPException as ex:
-            log_msg = "smtplib.SMTPException failed: {}".format(ex.args)
+            log_msg = f"smtplib.SMTPException failed: {ex.args}"
             logger.error(log_msg)
             raise ex
         except Exception as ex:
-            log_msg = "smtp failed: {}".format(ex.args)
+            log_msg = f"smtp failed: {ex.args}"
             logger.error(log_msg)
             raise ex
 
@@ -97,7 +97,7 @@ class SMTP(object):
         """check file exist
         """
         if not os.path.exists(path):
-            raise IOError("please check file '{}' exist".format(path))
+            raise IOError(f"please check file '{path}' exist")
         # Add attached file into mail
         ctype, encoding = mimetypes.guess_type(path)
         if ctype is None or encoding is not None:
@@ -136,7 +136,7 @@ class SMTP(object):
     def remove(self):
         """Remove attach list
         """
-        self.attach = list()
+        self.attach = []
 
     def close(self):
         """Quit SMTP connection
@@ -243,11 +243,11 @@ if __name__ == '__main__':
             
             try:
                 cc = [
-                    '{CC_MAIL}'
+                    f'{CC_MAIL}'
                 ]
                 server = 'smtp.gmail.com'
-                username = 'f{ACCOUNT}'
-                password = 'f{PASSWORD}'
+                username = f'{ACCOUNT}'
+                password = f'{PASSWORD}'
                 smtp = SMTP(server=server, username=username, password=password)
                 smtp.send(
                     recipients=[talk['email']], 
