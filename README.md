@@ -20,7 +20,7 @@
 
 ## 修改信件內容
 
-pg_sender.py 內共有以下四個變數要更改
+pg_sender.py 內共有以下五個變數要更改
 
 1. years = '' # 年度
 2. talk_proposal = '' # 審查系統匯出檔案
