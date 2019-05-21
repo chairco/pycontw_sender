@@ -22,10 +22,11 @@
 
 pg_sender.py 內共有以下四個變數要更改
 
-1. talk_proposal = '' # 審查系統匯出檔案
-2. doodle = '' # doodle 調查網址
-3. registration_date = '' # 註冊最後期限
-4. question_date = '' # 提問最後期限
+1. years = '' # 年度
+2. talk_proposal = '' # 審查系統匯出檔案
+3. doodle = '' # doodle 調查網址
+4. registration_date = '' # 註冊最後期限
+5. question_date = '' # 提問最後期限
 
 
 ## Google 變更低安全性應用程式存取帳戶
@@ -40,7 +41,7 @@ Google 因為安全性問題，因此不允許應用程式去存取帳戶，因�
 smtplib.SMTPAuthenticationError: (535, '5.7.8 Username and Password not accepted. Learn more at\n5.7.8 http://support.google.com/mail/bin/answer.py?answer=14257 g66sm2224117qgf.37 - gsmtp')
 ```
 
-簡單測試方式
+簡單測試方法:
 ```
 import smtplib
 
@@ -51,7 +52,7 @@ smtpserver.ehlo()
 smtpserver.login('{account}', '{password}')
 ```
 
-收到以下訊息代表變更成功
+收到以下訊息代表變更成功:
 ```
 (235, '2.7.0 Accepted')
 ```

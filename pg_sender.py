@@ -148,6 +148,7 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG,
                         format='%(asctime)s:%(name)s:%(levelname)s:%(message)s')
     
+    years = '2019'
     talk_proposal = '' # TalkProposal-2017-04-26.csv
     doodle = '' # http://doodle.com/poll/kt8a77geefxyinz4
     registration_date = '' # Jun 20
@@ -164,53 +165,61 @@ if __name__ == '__main__':
             <div style="border:2px #ccc solid;padding:15px;margin-top:15px;font-family:sans-serif;">
                 <p> English Below </p>
                 
-                <p>親愛的 %s 您好，</p>
+                <p>親愛的 %(name)s 您好，</p>
 
                 <p>
-                    恭喜！我們很高興通知，您的投稿 <strong>%s</strong> 經過  PyCon 臺灣 2019 審查委員們的最終審查後決議投稿為<strong>錄取</strong>。
+                    恭喜！我們很高興通知，您的投稿 <strong>%(title)s</strong> 經過  PyCon 臺灣 %(years)s 審查委員們的最終審查後決議投稿為<strong>錄取</strong>。
                 </p>
                 <p>
-                    議程組正在進行議程安排，各位講者如有偏好的演講時間，邀請您至 %s 
+                    議程組正在進行議程安排，各位講者如有偏好的演講時間，邀請您至 %(doodle)s 
                     網站以投稿信箱作為使用者名稱登記並勾選對應時間，假如需要修改請重新進入網站再次填寫，將以最新記錄為主。
                     如果沒有進入系統填寫，議程組將會主動幫您安排時間。最終議程還是會以大會公告為主。
                 </p>
                 <p>
-                    註冊組在稍早前也已經寄送<font color="green">投稿貢獻邀請碼（Submission, 投稿鼓勵票）</font>給您，請您務必在 %s 前完成購票，
+                    註冊組在稍早前也已經寄送<font color="green">投稿貢獻邀請碼（Submission, 投稿鼓勵票）</font>給您，請您務必在 %(registration_date)s 前完成購票，
                     <u>如果您臨時需要撤稿也請您回覆告知我們以方便議程安排。</u> 
                 </p>
                 <p>
                     同時也通知各位講者，如果您在交通或是門票上需要協助也誠摯歡迎您申請今年財務補助方案，只要您提出需要 PyConTW 都會盡最大力量。
-                    申請的辦法是進入財務補助網站填寫<a href="https://tw.pycon.org/2019/zh-hant/registration/financial-aid/">申請表單</a>。
+                    申請的辦法是進入財務補助網站填寫<a href="https://tw.pycon.org/%(years)s/zh-hant/registration/financial-aid/">申請表單</a>。
                 </p>
                 <p>
-                    以上是議程組與您提醒的相關細節與事項，如果有任何問題請您於 <strong>%s</strong> 號前來信 organizers@pycon.tw 與我們聯繫。
+                    以上是議程組與您提醒的相關細節與事項，如果有任何問題請您於 <strong>%(question_date)s</strong> 號前來信 organizers@pycon.tw 與我們聯繫。
                 </p>
                 <p>
                     再次恭喜您，期待我們今年會議會場見。<br>
                 </p>
                 <p>
                     Best Regards,<br>
-                    PyCon TW 2019 Program Committee
+                    PyCon TW %(years)s Program Committee
                 </p>
             </div>
-            """%(talk['name'], talk['title'], doodle, registration_date, question_date)
+            """%{
+                'years': years,
+                'name': talk['name'],
+                'title': talk['title'],
+                'doodle': doodle,
+                'registration_date': registration_date,
+                'question_date': question_date
+            }
+            #%(talk['name'], talk['title'], doodle, registration_date, question_date)
 
 
             en_content = """
             <div style="border:2px #ccc solid;padding:15px;margin-top:15px;font-family:sans-serif;">
 
-                <p>Dear Author %s,</p>
+                <p>Dear Author %(name)s,</p>
 
                 <p>
                     Congratulations!
                 </p>
 
                 <p>
-                    We are pleased to inform you that your proposal <strong>%s</strong> has been <strong>Accepted</strong> by the Programme Committee of the PyCon Taiwan 2019.
+                    We are pleased to inform you that your proposal <strong>%(title)s</strong> has been <strong>Accepted</strong> by the Programme Committee of the PyCon Taiwan %(years)s.
                 </p>
                 <p>
-                    The program team is going to plan the full program schedule for PyCon Taiwan 2019, 
-                    we invite you to access this website, %s, 
+                    The program team is going to plan the full program schedule for PyCon Taiwan %(years)s, 
+                    we invite you to access this website, %(doodle)s, 
                     and select date and time (please leave your email in “Your name” input box) 
                     if you have a preferred session time. If you do not have a preferred session time though, 
                     the program team will take the initiative to decide. 
@@ -219,27 +228,35 @@ if __name__ == '__main__':
                 <p>
                     Earlier, the registration team has already sent an <font color="green">invitation code </font>for you, 
                     so you can always buy the ticket with early bird price, 
-                    please complete the ticket purchase before %s. 
+                    please complete the ticket purchase before %(registration_date)s. 
                     <u>And if for some reason you have to withdraw your proposal, please also notify us through a reply.</u>
                 </p>
                 <p>
                     PyCon Taiwan has announced this year’s Financial Aid Program, which is for helping those who aren’t able to totally 
                     afford transport or registration fee to join PyCon TW. As long as you need a financial support, 
-                    please simply apply for the <a href="https://tw.pycon.org/2019/en-us/registration/financial-aid/">Financial Aid Program</a>.
+                    please simply apply for the <a href="https://tw.pycon.org/%(years)s/en-us/registration/financial-aid/">Financial Aid Program</a>.
                 </p>
                 <p>
                     The above is the relevant details and matters from the program team. 
-                    If have any please mail to <strong>organizers@pycon.tw</strong> before %s.
+                    If have any please mail to <strong>organizers@pycon.tw</strong> before %(question_date)s.
                 </p>
                 <p>
                     Congratulations again, and we’re looking forward to meeting you at this year's conference!<br>
                 </p>
                 <p>
                     Best Regards,<br>
-                    PyCon TW 2019 Program Committee
+                    PyCon TW %(years)s Program Committee
                 </p>
             </div>
-            """%(talk['name'], talk['title'], doodle, registration_date, question_date)
+            """%{
+                'years': years,
+                'name': talk['name'],
+                'title': talk['title'],
+                'doodle': doodle,
+                'registration_date': registration_date,
+                'question_date': question_date
+            }
+            #(talk['name'], talk['title'], doodle, registration_date, question_date)
             
             try:
                 cc = [
