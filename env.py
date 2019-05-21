@@ -6,7 +6,7 @@ import dotenv
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['ACCOUNT', 'PASSWORD', 'CC_MAIL']
+__all__ = ['ACCOUNT', 'PASSWORD', 'SENDER', 'CC_MAIL']
 
 ROOT_DIR_PATH = pathlib.Path(__file__).resolve().parent
 
@@ -18,6 +18,8 @@ if dotenv_path.exists():
 ACCOUNT = os.getenv('ACCOUNT')
 
 PASSWORD = os.getenv('PASSWORD')
+
+SENDER = os.getenv('SENDER')
 
 CC_MAIL = os.getenv('CC_MAIL')
 

@@ -13,7 +13,7 @@ from email.mime.image import MIMEImage
 from email.mime.audio import MIMEAudio
 from email import encoders
 
-from .env import ACCOUNT, PASSWORD, CC_MAIL
+from env import ACCOUNT, PASSWORD, SENDER, CC_MAIL
 
 
 logger = logging.getLogger(__name__)
@@ -31,7 +31,7 @@ class SMTP(object):
         self.server = server
         self.username = username
         self.password = password
-        self.sender = '{sender}'
+        self.sender = f'{SENDER}'
         log_msg = f"parameter: {self.server}, {self.username}, {self.sender}"
         logger.debug(log_msg)
         self.connect()
@@ -158,7 +158,7 @@ if __name__ == '__main__':
         talks = csv.DictReader(csvfile)
         for talk in talks:
             speakers.append([talk['name'], talk['title'], talk['email']])
-            logger.info('作者', talk['name'], '題目：', talk['title'])
+            logger.info(f"作者, {talk['name']}, 題目： {talk['title']}")
             
             zh_content = """
             <div style="border:2px #ccc solid;padding:15px;margin-top:15px;font-family:sans-serif;">
