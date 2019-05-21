@@ -1,5 +1,4 @@
 #-*- coding: utf-8 -*-
-
 import os
 import re
 import smtplib
@@ -13,7 +12,6 @@ from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
 from email.mime.audio import MIMEAudio
 from email import encoders
-
 
 from .env import ACCOUNT, PASSWORD, CC_MAIL
 
@@ -34,15 +32,10 @@ class SMTP(object):
         self.username = username
         self.password = password
         self.sender = '{sender}'
-        log_msg = "parameter: {0}, {1}, {2}".format(
-            self.server,
-            self.username,
-            self.password,
-            self.sender
-        )
+        log_msg = f"parameter: {self.server}, {self.username}, {self.sender}"
         logger.debug(log_msg)
         self.connect()
-        self.attach = list()
+        self.attach = []
 
     def __del__(self):
         self.smt.quit()
@@ -155,21 +148,22 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG,
                         format='%(asctime)s:%(name)s:%(levelname)s:%(message)s')
     
-    talk_proposal = 'TalkProposal-2017-04-26.csv' 
-    dodle = 'http://doodle.com/poll/kt8a77geefxyinz4'
-    registration_date = ''
-    question_date = ''
+    talk_proposal = '' # TalkProposal-2017-04-26.csv
+    doodle = '' # http://doodle.com/poll/kt8a77geefxyinz4
+    registration_date = '' # Jun 20
+    question_date = '' # May 30
     speakers = []
 
     with open(talk_proposal, 'rt') as csvfile: # because is text file so need use 'rt' open not 'rb'
         talks = csv.DictReader(csvfile)
         for talk in talks:
             speakers.append([talk['name'], talk['title'], talk['email']])
-            print('作者', talk['name'], '題目：', talk['title'])
+            logger.info('作者', talk['name'], '題目：', talk['title'])
             
             zh_content = """
             <div style="border:2px #ccc solid;padding:15px;margin-top:15px;font-family:sans-serif;">
-
+                <p> English Below </p>
+                
                 <p>親愛的 %s 您好，</p>
 
                 <p>
@@ -199,7 +193,7 @@ if __name__ == '__main__':
                     PyCon TW 2019 Program Committee
                 </p>
             </div>
-            """%(talk['name'], talk['title'], dodle, registration_date, question_date)
+            """%(talk['name'], talk['title'], doodle, registration_date, question_date)
 
 
             en_content = """
@@ -245,7 +239,7 @@ if __name__ == '__main__':
                     PyCon TW 2019 Program Committee
                 </p>
             </div>
-            """%(talk['name'], talk['title'], dodle, registration_date, question_date)
+            """%(talk['name'], talk['title'], doodle, registration_date, question_date)
             
             try:
                 cc = [
@@ -258,10 +252,9 @@ if __name__ == '__main__':
                 smtp.send(
                     recipients=[talk['email']], 
                     cc=cc, 
-                    title='[PyConTW2019] Call for Proposals Acceptance letter', #'[PyConTW2017] 投稿錄取通知信', 
-                    text_source=en_content
+                    title='[PyConTW2019] Call for Proposals Acceptance letter', # 統一用英文 '[PyConTW2018] 投稿錄取通知信', 
+                    text_source=zh_content + en_content
                 )
-                #samp_stmp.add_file("producer_consumer.png")
             
             except Exception as ex:
                 raise ex
