@@ -30,8 +30,30 @@ pg_sender.py 內共有以下四個變數要更改
 
 ## Google 變更低安全性應用程式存取帳戶
 
-[網址](https://support.google.com/accounts/answer/6010255?authuser=1&p=lsa_blocked&hl=zh-Hant&authuser=1&visit_id=636940144218553665-4017599695&rd=1)根據步驟變更。
+Google 因為安全性問題，因此不允許應用程式去存取帳戶，因此如果要透過 Google mail server 寄信要先到[網址](https://support.google.com/accounts/answer/6010255?authuser=1&p=lsa_blocked&hl=zh-Hant&authuser=1&visit_id=636940144218553665-4017599695&rd=1)根據步驟變更。
 
-使用後要記得改回原本高權限。 
+**使用後要記得改回原本高權限**。
 
 
+執行程式跳出以下錯誤，就是沒有變更權限:
+```
+smtplib.SMTPAuthenticationError: (535, '5.7.8 Username and Password not accepted. Learn more at\n5.7.8 http://support.google.com/mail/bin/answer.py?answer=14257 g66sm2224117qgf.37 - gsmtp')
+```
+
+簡單測試方式
+```
+import smtplib
+
+smtpserver = smtplib.SMTP("smtp.gmail.com", 587)
+smtpserver.ehlo()
+smtpserver.starttls()
+smtpserver.ehlo()
+smtpserver.login('{account}', '{password}')
+```
+
+收到以下訊息代表變更成功
+```
+(235, '2.7.0 Accepted')
+```
+
+再次提醒，**使用後要記得改回原本高權限**。
