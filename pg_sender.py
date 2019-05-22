@@ -18,8 +18,18 @@ from jinja2 import Environment, FileSystemLoader
 
 from env import ACCOUNT, PASSWORD, SENDER, CC_MAIL
 
+from fm import filters, read_csv
+
 
 logger = logging.getLogger(__name__)
+
+
+years = ''  # 2019
+talk_proposal = ''  # TalkProposal-2017-04-26.csv
+ignore_talk = None # None
+doodle = ''  # http://doodle.com/poll/kt8a77geefxyinz4
+registration_date = ''  # Jun 20
+question_date = ''  # May 30
 
 
 class SMTP(object):
@@ -148,6 +158,12 @@ class SMTP(object):
         self.smt.quit()
 
 
+@filters(ignore_talk)
+def get_talks(f):
+    talks = read_csv(f)
+    return talks
+
+
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG,
                         format='%(asctime)s:%(name)s:%(levelname)s:%(message)s')
@@ -160,46 +176,39 @@ if __name__ == '__main__':
     template_zh = env.get_template('zh.html')
     template_en = env.get_template('en.html')
 
-    years = ''  # 2019
-    talk_proposal = ''  # TalkProposal-2017-04-26.csv
-    doodle = ''  # http://doodle.com/poll/kt8a77geefxyinz4
-    registration_date = ''  # Jun 20
-    question_date = ''  # May 30
     speakers = []
+    # get filter talks    
+    talks = get_talks(talk_proposal)
+    for talk in talks:
+        speakers.append([talk['name'], talk['title'], talk['email']])
+        logger.info(f"作者, {talk['name']}, 題目： {talk['title']}")
 
-    # because is text file so need use 'rt' open not 'rb'
-    with open(talk_proposal, 'rt') as csvfile:
-        talks = csv.DictReader(csvfile)
-        for talk in talks:
-            speakers.append([talk['name'], talk['title'], talk['email']])
-            logger.info(f"作者, {talk['name']}, 題目： {talk['title']}")
+        zh_content = template_zh.render(years=years, name=talk['name'], title=talk['title'],
+                                        doodle=doodle, registration_date=registration_date,
+                                        question_date=question_date)
 
-            zh_content = template_zh.render(years=years, name=talk['name'], title=talk['title'],
-                                            doodle=doodle, registration_date=registration_date,
-                                            question_date=question_date)
+        en_content = template_en.render(years=years, name=talk['name'], title=talk['title'],
+                                        doodle=doodle, registration_date=registration_date,
+                                        question_date=question_date)
+        try:
+            cc = [
+                f'{CC_MAIL}'
+            ]
+            server = 'smtp.gmail.com'
+            username = f'{ACCOUNT}'
+            password = f'{PASSWORD}'
+            smtp = SMTP(server=server, username=username,
+                        password=password)
+            smtp.send(
+                recipients=[talk['email']],
+                cc=cc,
+                title='[PyConTW2019] Call for Proposals Acceptance letter', # 統一用英文 '[PyConTW2018] 投稿錄取通知信',
+                text_source=zh_content + en_content
+            )
 
-            en_content = template_en.render(years=years, name=talk['name'], title=talk['title'],
-                                            doodle=doodle, registration_date=registration_date,
-                                            question_date=question_date)
+        except Exception as ex:
+            raise ex
 
-            try:
-                cc = [
-                    f'{CC_MAIL}'
-                ]
-                server = 'smtp.gmail.com'
-                username = f'{ACCOUNT}'
-                password = f'{PASSWORD}'
-                smtp = SMTP(server=server, username=username,
-                            password=password)
-                smtp.send(
-                    recipients=[talk['email']],
-                    cc=cc,
-                    title='[PyConTW2019] Call for Proposals Acceptance letter', # 統一用英文 '[PyConTW2018] 投稿錄取通知信',
-                    text_source=zh_content + en_content
-                )
-
-            except Exception as ex:
-                raise ex
-
-            finally:
-                del smtp
+        finally:
+            del smtp
+        
