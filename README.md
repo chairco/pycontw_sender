@@ -24,9 +24,10 @@ pg_sender.py 內共有以下五個變數要更改
 
 1. years = '' # 年度
 2. talk_proposal = '' # 審查系統匯出檔案
-3. doodle = '' # doodle 調查網址
-4. registration_date = '' # 註冊最後期限
-5. question_date = '' # 提問最後期限
+3. ignore_talk = None # 忽略的 talk
+4. doodle = '' # doodle 調查網址
+5. registration_date = '' # 註冊最後期限
+6. question_date = '' # 提問最後期限
 
 
 ## Google 變更低安全性應用程式存取帳戶

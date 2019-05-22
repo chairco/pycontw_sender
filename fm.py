@@ -36,7 +36,7 @@ def read_csv(f):
     return talks
 
 
-#@filters('TalkProposal-2019-05-21.csv')
+# test
 @filters('TalkProposal-2019-05-21.csv')
 def get_talks():
     f = 'TalkProposal-2019-05-22.csv'
